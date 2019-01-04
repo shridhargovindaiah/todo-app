@@ -9,13 +9,13 @@ class Todo extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    const task = "";
+    //const task = "";
     this.props.handleSubmit(this.state.task);
-    this.setState({ task });
+    this.setState({ task: "" });
   };
 
   render() {
-    const { styles } = this.props;
+    const { styles, taskNumber } = this.props;
 
     return (
       <form onSubmit={this.onSubmit}>
@@ -28,7 +28,7 @@ class Todo extends Component {
           onChange={this.handleChange}
         />
         <br />
-        <button style={styles.Button}>Add Task #3</button>
+        <button style={styles.Button}>Add Task #{taskNumber + 1}</button>
       </form>
     );
   }

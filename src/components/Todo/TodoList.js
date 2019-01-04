@@ -2,11 +2,15 @@ import React from "react";
 
 const TodoList = ({ tasks }) => {
   return (
-    <ul>
+    <ol>
       {tasks.map(task => {
-        return <li key={task.id}>{task.task}</li>;
+        return (
+          <li key={task.id}>
+            {task.title} - {task.completed ? "Done" : "Pending"}
+          </li>
+        );
       })}
-    </ul>
+    </ol>
   );
 };
 

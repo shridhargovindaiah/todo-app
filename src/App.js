@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 
 import TodoTitle from "./components/Todo/TodoTitle";
 import Todo from "./components/Todo/Todo";
@@ -34,15 +35,47 @@ class App extends Component {
     };
   }
 
-  handleSubmit(task) {
-    const newTask = {
-      task: task,
-      id: Date.now()
-    };
+  componentDidMount() {
+    //Get previously added task from server
+    const url = "http://jsonplaceholder.typicode.com/todos";
+    axios
+      .get(url)
+      .then(response => {
+        if (response.status === 200) {
+          //const tasks = [...response.data[0]];
+          this.setState({ tasks: response.data.slice(0, 10) });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    //Update it to state object.
+  }
 
-    this.setState({
-      tasks: [newTask, ...this.state.tasks]
-    });
+  handleSubmit(task) {
+    // const newTask = {
+    //   task: task,
+    //   id: Date.now()
+    // };
+
+    // this.setState({
+    //   tasks: [newTask, ...this.state.tasks]
+    // });
+
+    const newTask = {
+      userId: 10,
+      title: task,
+      completed: false
+    };
+    const url = "http://jsonplaceholder.typicode.com/todos";
+    axios
+      .post(url, newTask)
+      .then(response => {
+        this.setState({
+          tasks: [response.data, ...this.state.tasks]
+        });
+      })
+      .catch(err => console.log(err));
   }
 
   render() {
@@ -53,7 +86,7 @@ class App extends Component {
         <Todo
           handleSubmit={this.handleSubmit}
           styles={style}
-          xyz={"some test"}
+          taskNumber={tasks.length}
         />
         <TodoList tasks={tasks} />
       </div>
