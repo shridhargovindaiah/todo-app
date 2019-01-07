@@ -1,28 +1,34 @@
 import React, { Component } from "react";
 import axios from "axios";
 
+import { withStyles, Paper } from "@material-ui/core";
+
 import TodoTitle from "./components/Todo/TodoTitle";
 import Todo from "./components/Todo/Todo";
 import TodoList from "./components/Todo/TodoList";
 
-const style = {
-  container: {
-    width: 500,
-    marginLeft: "auto",
-    marginRight: "auto"
+const styles = {
+  root: {
+    flexGrow: 1
   },
-  Label: {
-    margin: 10
+  paper: {
+    paddingTop: 2,
+    paddingBottom: 2,
+    margin: 6,
+    textAlign: "center"
   },
-  Textfield: {
-    margin: 10,
-    width: 300
-  },
-  Button: {
-    margin: 10,
-    padding: 10
+  textField: {
+    width: 100
   }
 };
+
+function doubleTheValue(arr, callBack) {
+  const newArr = [];
+  for (let i = 0; i < arr.length; i++) {
+    newArr.push(callBack(arr[i], i, arr));
+  }
+  return newArr;
+}
 
 class App extends Component {
   constructor() {
@@ -36,6 +42,14 @@ class App extends Component {
   }
 
   componentDidMount() {
+    const arr = ["Jonsy", "Mike", "Mat"]; //[4, 6, 8]
+
+    console.log(
+      doubleTheValue(arr, function(el) {
+        return el + " Jonathan";
+      })
+    );
+
     //Get previously added task from server
     const url = "http://jsonplaceholder.typicode.com/todos";
     axios
@@ -78,20 +92,30 @@ class App extends Component {
       .catch(err => console.log(err));
   }
 
+  handleComplete = task => {
+    const tasks = [...this.state.tasks];
+    const index = tasks.indexOf(task);
+    tasks[index].completed = true;
+    this.setState({ tasks });
+  };
+
   render() {
     const { tasks } = this.state;
+    const { classes } = this.props;
     return (
-      <div style={style.container}>
-        <TodoTitle title={"Todo Application"} />
-        <Todo
-          handleSubmit={this.handleSubmit}
-          styles={style}
-          taskNumber={tasks.length}
-        />
-        <TodoList tasks={tasks} />
+      <div className={classes.root}>
+        <Paper className={classes.paper}>
+          <TodoTitle title={"Todo Application"} />
+        </Paper>
+        <Paper className={classes.paper}>
+          <Todo handleSubmit={this.handleSubmit} taskNumber={tasks.length} />
+        </Paper>
+        <Paper className={classes.paper}>
+          <TodoList tasks={tasks} handleComplete={this.handleComplete} />
+        </Paper>
       </div>
     );
   }
 }
 
-export default App;
+export default withStyles(styles)(App);

@@ -1,34 +1,47 @@
 import React, { Component } from "react";
+import validator from "validator";
 
 class Todo extends Component {
   state = {
-    task: ""
+    task: "",
+    error: ""
   };
 
   handleChange = e => this.setState({ task: e.target.value });
 
   onSubmit = e => {
     e.preventDefault();
-    //const task = "";
-    this.props.handleSubmit(this.state.task);
-    this.setState({ task: "" });
+    const task = "";
+    let error = "";
+    const { task: newTask } = this.state;
+    if (validator.isEmpty(newTask)) {
+      error = "Task can not be empty.";
+      this.setState({ error });
+      return;
+    }
+    error = "";
+    this.props.handleSubmit(newTask);
+    this.setState({ task, error });
   };
 
   render() {
-    const { styles, taskNumber } = this.props;
-
+    const { taskNumber } = this.props;
+    const { task, error } = this.state;
     return (
       <form onSubmit={this.onSubmit}>
-        <label style={styles.Label}>Add your task here:-</label>
+        <label>Add your task here:-</label>
+        <br />
         <br />
         <input
-          style={styles.Textfield}
           type="text"
-          value={this.state.task}
+          style={{ width: 200 }}
+          value={task}
           onChange={this.handleChange}
         />
+        <p style={{ color: "red" }}>{error}</p>
+
+        <button>Add Task #{taskNumber + 1}</button>
         <br />
-        <button style={styles.Button}>Add Task #{taskNumber + 1}</button>
       </form>
     );
   }
