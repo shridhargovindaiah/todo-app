@@ -34,7 +34,7 @@ class App extends Component {
   constructor() {
     super();
 
-    this.handleSubmit = this.handleSubmit.bind(this);
+    //this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
       tasks: []
@@ -42,14 +42,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const arr = ["Jonsy", "Mike", "Mat"]; //[4, 6, 8]
-
-    console.log(
-      doubleTheValue(arr, function(el) {
-        return el + " Jonathan";
-      })
-    );
-
     //Get previously added task from server
     const url = "http://jsonplaceholder.typicode.com/todos";
     axios
@@ -66,7 +58,7 @@ class App extends Component {
     //Update it to state object.
   }
 
-  handleSubmit(task) {
+  handleSubmit = task => {
     // const newTask = {
     //   task: task,
     //   id: Date.now()
@@ -90,7 +82,7 @@ class App extends Component {
         });
       })
       .catch(err => console.log(err));
-  }
+  };
 
   handleComplete = task => {
     const tasks = [...this.state.tasks];

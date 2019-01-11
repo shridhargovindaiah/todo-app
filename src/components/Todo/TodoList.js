@@ -1,35 +1,53 @@
 import React from "react";
-import {
-  Grid,
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction
-} from "@material-ui/core";
+import { Grid, Badge } from "@material-ui/core";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 import DeleteIcon from "@material-ui/icons/Delete";
+import Done from "@material-ui/icons/Done";
 
 const TodoList = ({ tasks, handleComplete }) => {
   return (
-    <Grid container>
-      <Grid item xs={12} md={6}>
-        {tasks.map(task => {
-          return (
-            <ListItem key={task.id}>
-              <ListItemText>
-                {task.title} - {task.completed ? "Done" : "Pending"}
-              </ListItemText>
-              <ListItemSecondaryAction>
-                <DeleteIcon />
-                {task.completed ? (
-                  <button disabled>Completed</button>
-                ) : (
-                  <button onClick={() => handleComplete(task)}>
-                    Completed
-                  </button>
-                )}
-              </ListItemSecondaryAction>
-            </ListItem>
-          );
-        })}
+    <Grid container spacing={24}>
+      <Grid item xs>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>#</TableCell>
+              <TableCell align="right">Title</TableCell>
+              <TableCell align="right">Status</TableCell>
+              <TableCell align="right">Action</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {tasks.map((task, index) => {
+              return (
+                <TableRow key={task.id}>
+                  <TableCell component="th" scope="row">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell align="right">{task.title}</TableCell>
+                  <TableCell align="right">
+                    {task.completed ? "Done" : "Pending"}
+                  </TableCell>
+                  <TableCell align="right">
+                    <DeleteIcon color="error" />
+                    {task.completed ? (
+                      <Done color="disabled" />
+                    ) : (
+                      <Done
+                        color="primary"
+                        onClick={() => handleComplete(task)}
+                      />
+                    )}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
       </Grid>
     </Grid>
   );
